@@ -29,10 +29,6 @@ const UserSchema = new mongoose.Schema({
         required: true,
         minlength: 8,
     },
-    registration_date:{
-        type: Date,
-        default: Date.now
-    },
     tokens:
     [{
         token: {
