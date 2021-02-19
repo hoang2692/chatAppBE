@@ -10,10 +10,8 @@ try{
             try
             {
                 const customer = new Customer(req.body)
-                console.log(customer);
                 await customer.save()
                 const token = await customer.generateAuthToken()
-                console.log(token);
                 res.status(201).send({customer, token})
             }
             catch(erro){
@@ -23,10 +21,7 @@ try{
         login: async (req,res) =>{
             try{
                 const {email,password} = req.body
-                console.log(email);
-                console.log(password);
                 const customer = await Customer.findByCredentials(email,password)
-                console.log(customer);
                 if(!customer)
                 {
                     return res.send({error: "Login faild! Check authentication"})
@@ -82,6 +77,19 @@ try{
         delete: async (req,res) =>{
             var deleteProduct = await Customer.findByIdAndDelete({_id: req.params.id})
             res.json(deleteProduct)
+        },
+        deleteMovie: async (req,res) =>{
+            var customer = await Customer.findById({_id: req.params.idCustomer})
+            if(customer)
+            {
+                const index = customer.favoriteMovie.indexOf(req.params.idMovie)
+                if(index > -1)
+                {
+                    customer.favoriteMovie.splice(index,1)
+                }
+                customer.save()
+            }
+            res.json(customer)
         },
     }
     module.exports = CustomerControler;
